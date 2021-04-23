@@ -5,7 +5,7 @@ This is a Java implementation of an Enigma machine, along with code that attempt
 An enigma machine is a mechanical encryption device that saw a lot of use before and during WW2. This code simulates a 3 rotor enigma, including the 8 rotors commonly seen during the war. 
 
 ## Installing and Usage
-You can compile and run this code yourself if you have Java installed. For convenience I recommend using [IntelliJ](https://www.jetbrains.com/idea/) or a similar IDE. The community edition is free, and it'll make editing, compiling and running the code a lot easier. If you'd like to run it yourself, first install java, you follow the instructions below. This assumes you've installed java and git.
+You can compile and run this code yourself if you have Java installed. For convenience I recommend using [IntelliJ](https://www.jetbrains.com/idea/) or a similar IDE. The community edition is free, and it'll make editing, compiling and running the code a lot easier. If you'd like to run it yourself, first install java, then follow the instructions below. This assumes you've installed java and git.
 
 ### Windows
 Clone and traverse into the enigma directory
@@ -19,7 +19,7 @@ Compile all the java files from src into bin
 javac -d bin -sourcepath src src\com\mikepound\Main.java
 ```
 
-Copy the n-gram statistics into the bin folder too 
+Copy the n-gram statistics into the bin folder too
 ```
 xcopy resources\data bin\data\
 ```
