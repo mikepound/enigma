@@ -93,6 +93,7 @@ The basic approach to the attack is as follows:
 
 ## Notes
 * The code is fairly efficient, Enigma boils down to a lot of array indexing into different rotors. This said, I didn't worry too much about speed, it's plenty fast enough. I used classes and functions rather than doing things inline, for example. Modern compilers will optimise a lot of it anyway.
+* I've added a more optimised and multi-threaded version in a branch called [optimised](https://github.com/mikepound/enigma/tree/optimised). I've managed to get the code to break a message in under 4 seconds on one of our servers! I'm keeping this code separate to the main branch to keep the main branch clean and based off the original video.
 * Similarly, in the brute force key search code, for simplicity I create new enigma machines as required rather than implementing a number of specific reinitialisation functions that would be faster.
 * I've not written any kind of command line parsing here. You're welcome to add this, but i felt for a tutorial on enigma and breaking it, a step by step procedure in main was fine.
 
