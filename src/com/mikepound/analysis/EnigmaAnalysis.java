@@ -14,55 +14,61 @@ public class EnigmaAnalysis {
     }
 
     public static ScoredEnigmaKey[] findRotorConfiguration(char[] ciphertext, AvailableRotors rotors, String plugboard, int requiredKeys, FitnessFunction f) {
-        String[] availableRotorList;
+        List<String> availableRotorList;
 
         switch (rotors) {
             case THREE:
-                availableRotorList = new String[] {"I", "II", "III"};
+                availableRotorList = List.of("I", "II", "III");
                 break;
             case FIVE:
-                availableRotorList = new String[] {"I", "II", "III", "IV", "V"};
+                availableRotorList = List.of("I", "II", "III", "IV", "V");
                 break;
             case EIGHT:
             default:
-                availableRotorList = new String[] {"I", "II", "III", "IV", "V", "VI", "VII", "VIII"};
+                availableRotorList = List.of("I", "II", "III", "IV", "V", "VI", "VII", "VIII");
                 break;
         }
 
-        String[] optimalRotors;
-        int[] optimalPositions;
+        final List<ScoredEnigmaKey> keySet = Collections.synchronizedList(new ArrayList<>());
+        int[] defaultStartingPositions = new int[]{0, 0, 0};
+        int[] defaultRingSettings = new int[]{0, 0, 0};
 
-        List<ScoredEnigmaKey> keySet = new ArrayList<>();
+        availableRotorList.parallelStream()
+            .forEach(rotor1 -> {
+                for (String rotor2 : availableRotorList) {
+                    if (rotor1.equals(rotor2)) continue;
+                    for (String rotor3 : availableRotorList) {
+                        if (rotor1.equals(rotor3) || rotor2.equals(rotor3)) continue;
+                        System.out.println(rotor1 + " " + rotor2 + " " + rotor3 );
 
-        for (String rotor1 : availableRotorList) {
-            for (String rotor2 : availableRotorList) {
-                if (rotor1.equals(rotor2)) continue;
-                for (String rotor3 : availableRotorList) {
-                    if (rotor1.equals(rotor3) || rotor2.equals(rotor3)) continue;
-                    System.out.println(rotor1 + " " + rotor2 + " " + rotor3 );
+                        Enigma e = new Enigma(new String[]{rotor1, rotor2, rotor3}, "B", defaultStartingPositions, defaultRingSettings, plugboard);
 
-                    float maxFitness = -1e30f;
-                    EnigmaKey bestKey = null;
-                    for (int i = 0; i < 26; i++) {
-                        for (int j = 0; j < 26; j++) {
-                            for (int k = 0; k < 26; k++) {
-                                Enigma e = new Enigma(new String[]{rotor1, rotor2, rotor3}, "B", new int[]{i, j, k}, new int[]{0, 0, 0}, plugboard);
-                                char[] decryption = e.encrypt(ciphertext);
-                                float fitness = f.score(decryption);
-                                if (fitness > maxFitness) {
-                                    maxFitness = fitness;
-                                    optimalRotors = new String[] { e.leftRotor.getName(), e.middleRotor.getName(), e.rightRotor.getName()};
-                                    optimalPositions = new int[] { i, j, k};
-                                    bestKey = new EnigmaKey(optimalRotors, optimalPositions, null, plugboard);
+                        float maxFitness = -1e30f;
+                        EnigmaKey bestKey = null;
+                        for (int i = 0; i < 26; i++) {
+                            for (int j = 0; j < 26; j++) {
+                                for (int k = 0; k < 26; k++) {
+                                    e.resetRotorPositions(i,j,k);
+
+                                    char[] decryption = e.encrypt(ciphertext);
+                                    float fitness = f.score(decryption);
+                                    if (fitness > maxFitness) {
+                                        maxFitness = fitness;
+                                        bestKey = new EnigmaKey(
+                                                new String[] { e.leftRotor.getName(), e.middleRotor.getName(), e.rightRotor.getName()},
+                                                new int[] { i, j, k},
+                                                null,
+                                                plugboard);
+                                    }
                                 }
                             }
                         }
-                    }
 
-                    keySet.add(new ScoredEnigmaKey(bestKey, maxFitness));
+                        keySet.add(new ScoredEnigmaKey(bestKey, maxFitness));
+                    }
                 }
-            }
-        }
+
+            });
 
         // Sort keys by best performing (highest fitness score)
         keySet.sort(Collections.reverseOrder());

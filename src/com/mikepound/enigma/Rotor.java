@@ -18,6 +18,14 @@ public class Rotor {
         this.ringSetting = ringSetting;
     }
 
+    public void resetPosition(int rotorPosition) {
+        this.rotorPosition = rotorPosition;
+    }
+
+    public void resetRing(int ringSetting) {
+        this.ringSetting = ringSetting;
+    }
+
     public static Rotor Create(String name, int rotorPosition, int ringSetting) {
         switch (name) {
             case "I":

@@ -26,6 +26,12 @@ public class Enigma {
         this(key.rotors, "B", key.indicators, key.rings, key.plugboard);
     }
 
+    public void resetRotorPositions(int a, int b, int c) {
+        this.leftRotor.resetPosition(a);
+        this.middleRotor.resetPosition(b);
+        this.rightRotor.resetPosition(c);
+    }
+
     public void rotate() {
         // If middle rotor notch - double-stepping
         if (middleRotor.isAtNotch()) {
