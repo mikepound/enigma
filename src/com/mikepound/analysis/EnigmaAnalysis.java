@@ -5,9 +5,6 @@ import com.mikepound.enigma.Enigma;
 import com.mikepound.enigma.Plugboard;
 
 import java.util.*;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class EnigmaAnalysis {
     public enum AvailableRotors {
@@ -15,16 +12,6 @@ public class EnigmaAnalysis {
         FIVE,
         EIGHT
     }
-
-    /*this.Inq.stream().filter(simInq -> !simInq.isClosed() && !simInq.isDenied())
-  .forEach(simInq -> Quotations.values().stream().filter(sapQuot ->
-   sapQuot.getInquiryDocumentNumber().compareTo(simInq.getSapInquiryNumber())==0)
-   .forEach(sapQuot -> {
-      simInq.setSAPQuotationNumber(sapQuot.getQuotationDocumentNumber());
-      tempInqAndQuot.add(simInq);
-      tempQuotPos.addAll(sapQuot.getPosition().values());
-    })
-  );*/
 
     private static List<String[]> getThreeRotorCombinations(List<String> availableRotorList) {
         List<String[]> threeRotorCombinations = new ArrayList<>();
