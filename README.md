@@ -1,3 +1,6 @@
+# Optimised and multithreaded
+This branch has a few minor optimisations and includes multithreading during the rotor search to speed things up significantly. I've kept these changes in a separate branch because they tend to make code more cluttered and harder to follow, and so it's only for people who are interested.
+
 # Java Enigma
 
 This is a Java implementation of an Enigma machine, along with code that attempts to break the encryption. This code is associated with the Computerphile video on [cracking enigma](https://www.youtube.com/watch?v=RzWB5jL5RX0).
