@@ -81,9 +81,18 @@ Breaking an enigma message here comes down to decrypting a ciphertext with all p
 
 ### Fitness functions
 The code makes a number of fitness functions available that can be used to measure how close a test decryption is to English text. Each works similarly, some work better than others. You can test to see which work best for a given message. The fitness functions are:
-* **Index of coincidence**. The probability of any random two letters being identical. Tends to be higher for proper sentences than for random encrypted text
-* **Single / Bi / Tri / Quad grams**. The probability of a sentence measured based on the probability of constituent sequences of characters. Bigrams are pairs, such as AA or ST. Trigrams are triplets, e.g. THE, and so on.
-* **Plaintext Fitness**. This function is a known plaintext attack, comparing the decryption against all or portions of a suspected real plaintext. This is by far the most effective solution, even a few words of known plaintext will substantially increase your odds of a break even with a number of plugboard swaps.
+* **Index of coincidence**. The probability of any random two letters being identical. Tends to be higher for proper sentences than for random encrypted text. I've found this is quite good as an initial fitness function when there are many plugs involved.
+* **Single / Bi / Tri / Quad grams**. The probability of a sentence measured based on the probability of constituent sequences of characters. Bigrams are pairs, such as AA or ST. Trigrams are triplets, e.g. THE, and so on. The more letters you use, e.g. single -> bi -> tri -> quad seems to improve the power of the fitness function, but you can't rely on this. I've found the longer measures are better when you already have some of the settings correct.
+* **Plaintext Fitness**. This function is a known plaintext attack, comparing the decryption against all or portions of a suspected real plaintext. This is by far the most effective solution, even a few words of known plaintext will substantially increase your odds of a break even with a number of plugboard swaps. The constructor for this fitness function has two possible constructors:
+```java
+public KnownPlaintextFitness(char[] plaintext)
+```
+Use this if you have an entire complete plaintext you're looking for.
+
+```java
+public KnownPlaintextFitness(String[] words, int[] offsets)
+```
+This one takes pairs of words and their possible positions within the plaintext. For example, in the string "tobeornottobethatisthequestion" you might supply {"to", "that", "question"} and {0, 13, 22}. This function is used if you can guess some words, but aren't sure of the whole sentence, such as when you have partially broken the message already. Note that in the default example known plaintext won't improve much, because the attack is already successful. The errors in the output are not due to the fitness function, rather that we are not simultaneously pairing rotors and ring settings.
 
 ### Ciphertext Analysis
 The basic approach to the attack is as follows:
