@@ -21,34 +21,34 @@ public class Rotor {
     public static Rotor Create(String name, int rotorPosition, int ringSetting) {
         switch (name) {
             case "I":
-                return new Rotor("I","EKMFLGDQVZNTOWYHXUSPAIBRCJ", rotorPosition, 16, ringSetting);
+                return new Rotor("I","EKMFLGDQVZNTOWYHXUSPAIBRCJ", rotorPosition, 17, ringSetting);
             case "II":
-                return new Rotor("II","AJDKSIRUXBLHWTMCQGZNPYFVOE", rotorPosition, 4, ringSetting);
+                return new Rotor("II","AJDKSIRUXBLHWTMCQGZNPYFVOE", rotorPosition, 5, ringSetting);
             case "III":
-                return new Rotor("III","BDFHJLCPRTXVZNYEIWGAKMUSQO", rotorPosition, 21, ringSetting);
+                return new Rotor("III","BDFHJLCPRTXVZNYEIWGAKMUSQO", rotorPosition, 22, ringSetting);
             case "IV":
-                return new Rotor("IV","ESOVPZJAYQUIRHXLNFTGKDCMWB", rotorPosition, 9, ringSetting);
+                return new Rotor("IV","ESOVPZJAYQUIRHXLNFTGKDCMWB", rotorPosition, 10, ringSetting);
             case "V":
-                return new Rotor("V","VZBRGITYUPSDNHLXAWMJQOFECK", rotorPosition, 25, ringSetting);
+                return new Rotor("V","VZBRGITYUPSDNHLXAWMJQOFECK", rotorPosition, 26, ringSetting);
             case "VI":
                 return new Rotor("VI","JPGVOUMFYQBENHZRDKASXLICTW", rotorPosition, 0, ringSetting) {
                     @Override
                     public boolean isAtNotch() {
-                        return this.rotorPosition == 12 || this.rotorPosition == 25;
+                        return this.rotorPosition == 13 || this.rotorPosition == 26;
                     }
                 };
             case "VII":
                 return new Rotor("VII","NZJHGRCXMYSWBOUFAIVLPEKQDT", rotorPosition, 0, ringSetting) {
                     @Override
                     public boolean isAtNotch() {
-                        return this.rotorPosition == 12 || this.rotorPosition == 25;
+                        return this.rotorPosition == 13 || this.rotorPosition == 26;
                     }
                 };
             case "VIII":
                 return new Rotor("VIII","FKQHTLXOCBJSPDZRAMEWNIUYGV", rotorPosition, 0, ringSetting) {
                     @Override
                     public boolean isAtNotch() {
-                        return this.rotorPosition == 12 || this.rotorPosition == 25;
+                        return this.rotorPosition == 13 || this.rotorPosition == 26;
                     }
                 };
             default:
@@ -100,8 +100,7 @@ public class Rotor {
     }
 
     public void turnover() {
-        this.rotorPosition = (this.rotorPosition + 1) % 26;
+        this.rotorPosition = this.rotorPosition % 26 + 1;
     }
-
 
 }
