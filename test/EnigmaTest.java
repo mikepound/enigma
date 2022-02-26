@@ -70,8 +70,6 @@ class EnigmaTest {
 
     @Test
     void plugboardTest() {
-        Plugboard pb = new Plugboard("AG HR YT KI FL WE NM SD OP QJ");
-
         // Simple test - 4 plugs
         Enigma e = new Enigma(new String[] {"I", "II", "III"}, "B", new int[] {0,0,0}, new int[] {0,0,0}, "AC FG JY LW");
         char[] input = "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA".toCharArray();
