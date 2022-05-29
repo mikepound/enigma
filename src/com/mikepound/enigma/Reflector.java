@@ -1,34 +1,28 @@
 package com.mikepound.enigma;
 
-public class Reflector {
-    protected int[] forwardWiring;
+public enum Reflector {
 
-    public Reflector(String encoding) {
+    B("YRUHQSLDPXNGOKMIEBFZCWVJAT"),
+    C("FVPJIAOYEDRZXWGCTKUQSBNMHL"),
+    DEFAULT("ZYXWVUTSRQPONMLKJIHGFEDCBA");
+
+    private final int[] forwardWiring;
+
+    Reflector(String encoding) {
         this.forwardWiring = decodeWiring(encoding);
     }
 
-    public static Reflector Create(String name) {
-        switch (name) {
-            case "B":
-                return new Reflector("YRUHQSLDPXNGOKMIEBFZCWVJAT");
-            case "C":
-                return new Reflector("FVPJIAOYEDRZXWGCTKUQSBNMHL");
-            default:
-                return new Reflector("ZYXWVUTSRQPONMLKJIHGFEDCBA");
-        }
+    public int forward(int c) {
+        return this.forwardWiring[c];
     }
 
-    protected static int[] decodeWiring(String encoding) {
+    private int[] decodeWiring(String encoding) {
         char[] charWiring = encoding.toCharArray();
         int[] wiring = new int[charWiring.length];
         for (int i = 0; i < charWiring.length; i++) {
             wiring[i] = charWiring[i] - 65;
         }
         return wiring;
-    }
-
-    public int forward(int c) {
-        return this.forwardWiring[c];
     }
 
 }

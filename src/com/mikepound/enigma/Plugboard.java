@@ -1,79 +1,67 @@
 package com.mikepound.enigma;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 public class Plugboard {
-    private int[] wiring;
+
+    public final String connections;
+
+    private final int[] wiring = new int[26];
+    private final Set<Integer> unpluggedCharacters = new HashSet<>(26);
 
     public Plugboard(String connections) {
-        this.wiring = decodePlugboard(connections);
+        this.connections = connections;
+        initialize(connections);
     }
 
     public int forward(int c) {
         return this.wiring[c];
     }
 
-    private static int[] identityPlugboard() {
-        int[] mapping = new int[26];
-        for (int i = 0; i < 26; i++) {
-            mapping[i] = i;
-        }
-        return mapping;
+    public Set<Integer> getUnpluggedCharacters() {
+        return this.unpluggedCharacters;
     }
 
-    public static Set<Integer> getUnpluggedCharacters(String plugboard) {
-        Set<Integer> unpluggedCharacters = new HashSet<>();
+    private void initialize(String connections) {
         for (int i = 0; i < 26; i++) {
-            unpluggedCharacters.add(i);
+            this.wiring[i] = i;
+            this.unpluggedCharacters.add(i);
         }
 
-        if (plugboard.equals("")) {
-            return unpluggedCharacters;
+        if (connections == null || connections.equals("")) {
+            return;
         }
 
-        String[] pairings = plugboard.split("[^a-zA-Z]");
+        String[] pairings = connections.toUpperCase().split("[^A-Z]");
+        List<Character> pluggedCharacters = new ArrayList<>();
 
         // Validate and create mapping
         for (String pair : pairings) {
-            int c1 = pair.charAt(0) - 65;
-            int c2 = pair.charAt(1) - 65;
+            if (pair.length() != 2) {
+                throw new IllegalArgumentException("Incorrect plugboard configuration: exactly 2 different keys can be paired together. Connections: " + connections);
+            }
 
-            unpluggedCharacters.remove(c1);
-            unpluggedCharacters.remove(c2);
-        }
-
-        return unpluggedCharacters;
-    }
-
-    public static int[] decodePlugboard(String plugboard) {
-        if (plugboard == null || plugboard.equals("")) {
-            return identityPlugboard();
-        }
-
-        String[] pairings = plugboard.split("[^a-zA-Z]");
-        Set<Integer> pluggedCharacters = new HashSet<>();
-        int[] mapping = identityPlugboard();
-
-        // Validate and create mapping
-        for (String pair : pairings) {
-            if (pair.length() != 2)
-                return identityPlugboard();
-
-            int c1 = pair.charAt(0) - 65;
-            int c2 = pair.charAt(1) - 65;
+            char c1 = pair.charAt(0);
+            char c2 = pair.charAt(1);
 
             if (pluggedCharacters.contains(c1) || pluggedCharacters.contains(c2)) {
-                return identityPlugboard();
+                throw new IllegalArgumentException("Incorrect plugboard configuration: one key can't be paired more than once.\n" +
+                        "Characters to be paired: " + c1 + " and " + c2 + ".\n" +
+                        "Characters already paired: " + pluggedCharacters);
             }
 
             pluggedCharacters.add(c1);
             pluggedCharacters.add(c2);
 
-            mapping[c1] = c2;
-            mapping[c2] = c1;
-        }
+            // 0-shift char (the ASCII value of char 'A' is 65)
+            int shiftedChar1 = c1 - 65;
+            int shiftedChar2 = c2 - 65;
 
-        return mapping;
+            wiring[shiftedChar1] = shiftedChar2;
+            wiring[shiftedChar2] = shiftedChar1;
+
+            unpluggedCharacters.remove(shiftedChar1);
+            unpluggedCharacters.remove(shiftedChar2);
+        }
     }
 }
